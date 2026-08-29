@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IndicatorsIndexRouteImport } from './routes/indicators/index'
+import { Route as IndicatorsIndicatorIdRouteImport } from './routes/indicators/$indicatorId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IndicatorsIndexRoute = IndicatorsIndexRouteImport.update({
+  id: '/indicators/',
+  path: '/indicators/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndicatorsIndicatorIdRoute = IndicatorsIndicatorIdRouteImport.update({
+  id: '/indicators/$indicatorId',
+  path: '/indicators/$indicatorId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/indicators/$indicatorId': typeof IndicatorsIndicatorIdRoute
+  '/indicators/': typeof IndicatorsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/indicators/$indicatorId': typeof IndicatorsIndicatorIdRoute
+  '/indicators': typeof IndicatorsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/indicators/$indicatorId': typeof IndicatorsIndicatorIdRoute
+  '/indicators/': typeof IndicatorsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/indicators/$indicatorId' | '/indicators/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/indicators/$indicatorId' | '/indicators'
+  id: '__root__' | '/' | '/indicators/$indicatorId' | '/indicators/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  IndicatorsIndicatorIdRoute: typeof IndicatorsIndicatorIdRoute
+  IndicatorsIndexRoute: typeof IndicatorsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/indicators/': {
+      id: '/indicators/'
+      path: '/indicators'
+      fullPath: '/indicators/'
+      preLoaderRoute: typeof IndicatorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/indicators/$indicatorId': {
+      id: '/indicators/$indicatorId'
+      path: '/indicators/$indicatorId'
+      fullPath: '/indicators/$indicatorId'
+      preLoaderRoute: typeof IndicatorsIndicatorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  IndicatorsIndicatorIdRoute: IndicatorsIndicatorIdRoute,
+  IndicatorsIndexRoute: IndicatorsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
