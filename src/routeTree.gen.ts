@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ForecastRouteImport } from './routes/forecast'
+import { Route as ModelsRouteImport } from './routes/models'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as ResearchRouteImport } from './routes/research'
+import { Route as IndicatorsIndexRouteImport } from './routes/indicators/index'
+import { Route as IndicatorsIndicatorIdRouteImport } from './routes/indicators/$indicatorId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForecastRoute = ForecastRouteImport.update({
+  id: '/forecast',
+  path: '/forecast',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResearchRoute = ResearchRouteImport.update({
+  id: '/research',
+  path: '/research',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndicatorsIndexRoute = IndicatorsIndexRouteImport.update({
+  id: '/indicators/',
+  path: '/indicators/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndicatorsIndicatorIdRoute = IndicatorsIndicatorIdRouteImport.update({
+  id: '/indicators/$indicatorId',
+  path: '/indicators/$indicatorId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/forecast': typeof ForecastRoute
+  '/models': typeof ModelsRoute
+  '/profile': typeof ProfileRoute
+  '/research': typeof ResearchRoute
+  '/indicators/$indicatorId': typeof IndicatorsIndicatorIdRoute
+  '/indicators/': typeof IndicatorsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forecast': typeof ForecastRoute
+  '/models': typeof ModelsRoute
+  '/profile': typeof ProfileRoute
+  '/research': typeof ResearchRoute
+  '/indicators/$indicatorId': typeof IndicatorsIndicatorIdRoute
+  '/indicators': typeof IndicatorsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/forecast': typeof ForecastRoute
+  '/models': typeof ModelsRoute
+  '/profile': typeof ProfileRoute
+  '/research': typeof ResearchRoute
+  '/indicators/$indicatorId': typeof IndicatorsIndicatorIdRoute
+  '/indicators/': typeof IndicatorsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/forecast'
+    | '/models'
+    | '/profile'
+    | '/research'
+    | '/indicators/$indicatorId'
+    | '/indicators/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/forecast'
+    | '/models'
+    | '/profile'
+    | '/research'
+    | '/indicators/$indicatorId'
+    | '/indicators'
+  id:
+    | '__root__'
+    | '/'
+    | '/forecast'
+    | '/models'
+    | '/profile'
+    | '/research'
+    | '/indicators/$indicatorId'
+    | '/indicators/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ForecastRoute: typeof ForecastRoute
+  ModelsRoute: typeof ModelsRoute
+  ProfileRoute: typeof ProfileRoute
+  ResearchRoute: typeof ResearchRoute
+  IndicatorsIndicatorIdRoute: typeof IndicatorsIndicatorIdRoute
+  IndicatorsIndexRoute: typeof IndicatorsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forecast': {
+      id: '/forecast'
+      path: '/forecast'
+      fullPath: '/forecast'
+      preLoaderRoute: typeof ForecastRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/research': {
+      id: '/research'
+      path: '/research'
+      fullPath: '/research'
+      preLoaderRoute: typeof ResearchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/indicators/': {
+      id: '/indicators/'
+      path: '/indicators'
+      fullPath: '/indicators/'
+      preLoaderRoute: typeof IndicatorsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/indicators/$indicatorId': {
+      id: '/indicators/$indicatorId'
+      path: '/indicators/$indicatorId'
+      fullPath: '/indicators/$indicatorId'
+      preLoaderRoute: typeof IndicatorsIndicatorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ForecastRoute: ForecastRoute,
+  ModelsRoute: ModelsRoute,
+  ProfileRoute: ProfileRoute,
+  ResearchRoute: ResearchRoute,
+  IndicatorsIndicatorIdRoute: IndicatorsIndicatorIdRoute,
+  IndicatorsIndexRoute: IndicatorsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
