@@ -314,7 +314,7 @@ export const dataSources = [
 
 export function buildForecast(indicator: Indicator, point: number, horizon: number) {
   const hist = indicator.series.slice(-24);
-  const last = hist[hist.length - 1];
+  const last = hist[hist.length - 1]!;
   const lastYear = parseInt(last.period.slice(0, 4), 10);
   const lastQ = parseInt(last.period.slice(-1), 10) || 4;
 
@@ -334,8 +334,8 @@ export function buildForecast(indicator: Indicator, point: number, horizon: numb
     band: null,
   }));
 
-  rows[rows.length - 1].forecast = last.value;
-  rows[rows.length - 1].band = [last.value, last.value];
+  rows[rows.length - 1]!.forecast = last.value;
+  rows[rows.length - 1]!.band = [last.value, last.value];
 
   for (let i = 1; i <= horizon; i++) {
     const q = ((lastQ - 1 + i) % 4) + 1;
