@@ -87,7 +87,7 @@ export function TimeSeriesChart({ data, unit }: { data: Point[]; unit: string })
         </defs>
         <CartesianGrid stroke="var(--color-border)" vertical={false} />
         <XAxis dataKey="period" minTickGap={28} {...axis} />
-        <YAxis width={44} {...axis} />
+        <YAxis width={44} domain={["auto", "auto"]} {...axis} />
         <Tooltip formatter={(v) => [`${v}${unit}`, "Value"]} {...tooltipStyle()} />
         <Area
           type="monotone"
@@ -121,7 +121,7 @@ export function ForecastChart({
       <ComposedChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
         <CartesianGrid stroke="var(--color-border)" vertical={false} />
         <XAxis dataKey="period" minTickGap={30} {...axis} />
-        <YAxis width={44} {...axis} />
+        <YAxis width={44} domain={["auto", "auto"]} {...axis} />
         <Tooltip {...tooltipStyle()} />
         <Area
           type="monotone"
