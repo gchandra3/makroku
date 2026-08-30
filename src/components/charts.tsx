@@ -16,21 +16,27 @@ export function Sparkline({
   data,
   negative = false,
   height = 40,
+  onColor = false,
 }: {
   data: Point[];
   negative?: boolean;
   height?: number;
+  onColor?: boolean;
 }) {
   const id = `spark-${Math.abs(
     data.reduce((a, p, i) => a + p.value * (i + 1), 0) * 1000,
   ).toFixed(0)}`;
-  const stroke = negative ? "var(--color-negative)" : "var(--color-primary)";
+  const stroke = onColor
+    ? "oklch(1 0 0)"
+    : negative
+      ? "var(--color-negative)"
+      : "var(--color-primary)";
   return (
     <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
         <defs>
           <linearGradient id={id} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={stroke} stopOpacity={0.28} />
+            <stop offset="0%" stopColor={stroke} stopOpacity={onColor ? 0.4 : 0.28} />
             <stop offset="100%" stopColor={stroke} stopOpacity={0} />
           </linearGradient>
         </defs>
