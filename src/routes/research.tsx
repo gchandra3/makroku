@@ -158,7 +158,7 @@ function MiniChart({
       <p className="text-[11px] text-muted-foreground">{title}</p>
       <p className="text-xl font-extrabold tabular">{value}</p>
       <div className="mt-2 h-10">
-        <Sparkline data={ind.series.slice(-20)} negative={negative} />
+        <Sparkline data={ind.series.slice(-20)} negative={negative ?? false} />
       </div>
     </div>
   );
