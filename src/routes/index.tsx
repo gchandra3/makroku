@@ -77,8 +77,8 @@ function Home() {
             +0.3% vs previous forecast
           </p>
 
-          <div className="-mx-1 mt-3 h-14 opacity-90 [&_*]:!stroke-[white]">
-            <Sparkline data={headline.series.slice(-24)} height={56} />
+          <div className="-mx-1 mt-3 h-14">
+            <Sparkline data={headline.series.slice(-24)} height={56} onColor />
           </div>
 
           <div className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold">

@@ -175,7 +175,7 @@ function Result({
           {indicator.unit}
         </p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Expected next-quarter {indicator.name.replace("Indonesia ", "").toLowerCase()}
+          Expected next-quarter outcome for {indicator.name}
         </p>
         <p className="mt-1 text-[12px] font-semibold text-accent-foreground">
           {model.name} · 90% interval {lastRow.lower}

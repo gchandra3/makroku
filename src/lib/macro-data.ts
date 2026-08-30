@@ -227,6 +227,16 @@ export const indicators: Indicator[] = [
   },
 ];
 
+// Align each series so the final observation matches the headline value.
+for (const ind of indicators) {
+  const last = ind.series[ind.series.length - 1]!.value;
+  const shift = ind.value - last;
+  ind.series = ind.series.map((p) => ({
+    period: p.period,
+    value: Math.round((p.value + shift) * 100) / 100,
+  }));
+}
+
 export const countries = ["Indonesia", "Hong Kong", "Singapore", "Global"] as const;
 
 export function getIndicator(id: string) {
