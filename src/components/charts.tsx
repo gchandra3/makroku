@@ -96,6 +96,7 @@ export function TimeSeriesChart({ data, unit }: { data: Point[]; unit: string })
           strokeWidth={2.4}
           fill="url(#ts-fill)"
           dot={false}
+          isAnimationActive={false}
         />
       </AreaChart>
     </ResponsiveContainer>
@@ -130,6 +131,7 @@ export function ForecastChart({
           fill="var(--color-primary)"
           fillOpacity={0.14}
           name="90% interval"
+          isAnimationActive={false}
         />
         <Line
           type="monotone"
@@ -138,6 +140,7 @@ export function ForecastChart({
           strokeWidth={2.2}
           dot={false}
           name="Historical"
+          isAnimationActive={false}
           connectNulls
         />
         <Line
@@ -148,6 +151,7 @@ export function ForecastChart({
           strokeDasharray="5 4"
           dot={false}
           name="Forecast"
+          isAnimationActive={false}
           connectNulls
         />
         <ReferenceLine
