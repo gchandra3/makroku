@@ -96,7 +96,7 @@ export function TimeSeriesChart({ data, unit }: { data: Point[]; unit: string })
   return (
     <AfterPaint height={230}>
     <ResponsiveContainer width="100%" height={230}>
-      <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
+      <AreaChart data={data} margin={{ top: 8, right: 14, bottom: 0, left: -18 }}>
         <defs>
           <linearGradient id="ts-fill" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="var(--color-primary)" stopOpacity={0.25} />
@@ -105,7 +105,13 @@ export function TimeSeriesChart({ data, unit }: { data: Point[]; unit: string })
         </defs>
         <CartesianGrid stroke="var(--color-border)" vertical={false} />
         <XAxis dataKey="period" minTickGap={28} {...axis} />
-        <YAxis width={44} domain={["auto", "auto"]} {...axis} />
+        <YAxis
+          width={40}
+          domain={["auto", "auto"]}
+          tickCount={5}
+          tickFormatter={(v) => Number(v).toFixed(1)}
+          {...axis}
+        />
         <Tooltip formatter={(v) => [`${v}${unit}`, "Value"]} {...tooltipStyle()} />
         <Area
           type="monotone"
@@ -139,10 +145,16 @@ export function ForecastChart({
   return (
     <AfterPaint height={250}>
     <ResponsiveContainer width="100%" height={250}>
-      <ComposedChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
+      <ComposedChart data={rows} margin={{ top: 8, right: 14, bottom: 0, left: -18 }}>
         <CartesianGrid stroke="var(--color-border)" vertical={false} />
         <XAxis dataKey="period" minTickGap={30} {...axis} />
-        <YAxis width={44} domain={["auto", "auto"]} {...axis} />
+        <YAxis
+          width={40}
+          domain={["auto", "auto"]}
+          tickCount={5}
+          tickFormatter={(v) => Number(v).toFixed(1)}
+          {...axis}
+        />
         <Tooltip {...tooltipStyle()} />
         <Area
           type="monotone"
