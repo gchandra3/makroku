@@ -10,7 +10,22 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useEffect, useState, type ReactNode } from "react";
 import type { Point } from "@/lib/macro-data";
+
+/**
+ * Recharts measures its container on first paint; mounting one frame later
+ * avoids a stale clip-path when fonts/layout settle after hydration.
+ */
+function AfterPaint({ height, children }: { height: number; children: ReactNode }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  if (!ready) return <div style={{ height }} />;
+  return <>{children}</>;
+}
 
 export function Sparkline({
   data,
@@ -32,6 +47,7 @@ export function Sparkline({
       ? "var(--color-negative)"
       : "var(--color-primary)";
   return (
+    <AfterPaint height={height}>
     <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data} margin={{ top: 2, right: 0, bottom: 0, left: 0 }}>
         <defs>
@@ -51,6 +67,7 @@ export function Sparkline({
         />
       </AreaChart>
     </ResponsiveContainer>
+    </AfterPaint>
   );
 }
 
@@ -77,6 +94,7 @@ function tooltipStyle() {
 
 export function TimeSeriesChart({ data, unit }: { data: Point[]; unit: string }) {
   return (
+    <AfterPaint height={230}>
     <ResponsiveContainer width="100%" height={230}>
       <AreaChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
         <defs>
@@ -100,6 +118,7 @@ export function TimeSeriesChart({ data, unit }: { data: Point[]; unit: string })
         />
       </AreaChart>
     </ResponsiveContainer>
+    </AfterPaint>
   );
 }
 
@@ -118,6 +137,7 @@ export function ForecastChart({
   divider: string;
 }) {
   return (
+    <AfterPaint height={250}>
     <ResponsiveContainer width="100%" height={250}>
       <ComposedChart data={rows} margin={{ top: 8, right: 8, bottom: 0, left: -18 }}>
         <CartesianGrid stroke="var(--color-border)" vertical={false} />
@@ -167,5 +187,6 @@ export function ForecastChart({
         />
       </ComposedChart>
     </ResponsiveContainer>
+    </AfterPaint>
   );
 }
