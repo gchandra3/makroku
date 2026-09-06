@@ -3,7 +3,7 @@ import type { AnalysisResult } from "@/lib/analysis.functions";
 
 const KEY = "macrocast.analyses.v1";
 
-export type SavedAnalysis = AnalysisResult & { savedAt: string; note?: string };
+export type SavedAnalysis = AnalysisResult & { savedAt: string; note?: string | undefined };
 
 function read(): SavedAnalysis[] {
   if (typeof window === "undefined") return [];
@@ -54,4 +54,31 @@ export function relativeTime(iso: string) {
   if (hrs < 24) return `${hrs} hour${hrs === 1 ? "" : "s"} ago`;
   const days = Math.round(hrs / 24);
   return `${days} day${days === 1 ? "" : "s"} ago`;
+}
+
+/* ---------- current working analysis ---------- */
+
+const CURRENT = "macrocast.current.v1";
+
+export function setCurrentAnalysis(result: AnalysisResult) {
+  window.localStorage.setItem(CURRENT, JSON.stringify(result));
+  window.dispatchEvent(new Event("macrocast:current"));
+}
+
+export function useCurrentAnalysis() {
+  const [current, setCurrent] = useState<AnalysisResult | null>(null);
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const raw = window.localStorage.getItem(CURRENT);
+        setCurrent(raw ? (JSON.parse(raw) as AnalysisResult) : null);
+      } catch {
+        setCurrent(null);
+      }
+    };
+    sync();
+    window.addEventListener("macrocast:current", sync);
+    return () => window.removeEventListener("macrocast:current", sync);
+  }, []);
+  return current;
 }

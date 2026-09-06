@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getIndicator, sliceByYears, type Indicator } from "@/lib/econ-data";
-import { runRegression, type RegressionResult } from "@/lib/stats";
+import { predict, runRegression, type RegressionResult } from "@/lib/stats";
 
 export type VariableMeta = {
   id: string;
@@ -177,4 +177,30 @@ export const askAnalyst = createServerFn({ method: "POST" })
     const text = json.choices?.[0]?.message?.content?.trim();
     if (!text) return { ok: false, error: "The model returned an empty response." };
     return { ok: true, text };
+  });
+
+/* ---------------- prediction (statistical engine, never the UI) ---------------- */
+
+const predictSchema = inputSchema.extend({
+  values: z.record(z.string(), z.number()),
+});
+
+export type PredictionResponse =
+  | { ok: true; point: number; lower: number; upper: number }
+  | { ok: false; error: string };
+
+export const runPrediction = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) => predictSchema.parse(d))
+  .handler(async ({ data }): Promise<PredictionResponse> => {
+    const res = await runAnalysis({
+      data: {
+        targetId: data.targetId,
+        variableIds: data.variableIds,
+        from: data.from,
+        to: data.to,
+        significance: data.significance,
+      },
+    });
+    if (!res.ok) return { ok: false, error: res.error };
+    return { ok: true, ...predict(res.result.regression, data.values) };
   });
