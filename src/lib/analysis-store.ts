@@ -55,3 +55,30 @@ export function relativeTime(iso: string) {
   const days = Math.round(hrs / 24);
   return `${days} day${days === 1 ? "" : "s"} ago`;
 }
+
+/* ---------- current working analysis ---------- */
+
+const CURRENT = "macrocast.current.v1";
+
+export function setCurrentAnalysis(result: AnalysisResult) {
+  window.localStorage.setItem(CURRENT, JSON.stringify(result));
+  window.dispatchEvent(new Event("macrocast:current"));
+}
+
+export function useCurrentAnalysis() {
+  const [current, setCurrent] = useState<AnalysisResult | null>(null);
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const raw = window.localStorage.getItem(CURRENT);
+        setCurrent(raw ? (JSON.parse(raw) as AnalysisResult) : null);
+      } catch {
+        setCurrent(null);
+      }
+    };
+    sync();
+    window.addEventListener("macrocast:current", sync);
+    return () => window.removeEventListener("macrocast:current", sync);
+  }, []);
+  return current;
+}
