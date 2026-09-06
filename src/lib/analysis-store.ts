@@ -3,7 +3,7 @@ import type { AnalysisResult } from "@/lib/analysis.functions";
 
 const KEY = "macrocast.analyses.v1";
 
-export type SavedAnalysis = AnalysisResult & { savedAt: string; note?: string };
+export type SavedAnalysis = AnalysisResult & { savedAt: string; note?: string | undefined };
 
 function read(): SavedAnalysis[] {
   if (typeof window === "undefined") return [];
