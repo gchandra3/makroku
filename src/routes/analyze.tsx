@@ -29,9 +29,8 @@ import {
 } from "@/lib/econ-data";
 
 export const Route = createFileRoute("/analyze")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    target: typeof s["target"] === "string" ? s["target"] : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { target?: string } =>
+    typeof s["target"] === "string" ? { target: s["target"] } : {},
   head: () => ({
     meta: [
       { title: "Run an Economic Analysis | MacroCast" },
