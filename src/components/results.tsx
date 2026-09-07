@@ -11,7 +11,7 @@ export function aiPayload(result: AnalysisResult) {
     target: result.target.label,
     country: result.country,
     period: result.quality.period,
-    observations: result.observations ?? regression.observations,
+    observations: regression.observations,
     unit: result.target.unit,
     metrics: regression.metrics,
     significance_level: regression.diagnostics.significance_level,
