@@ -10,11 +10,31 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnalyzeRouteImport } from './routes/analyze'
+import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as PredictionsRouteImport } from './routes/predictions'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as DataIndexRouteImport } from './routes/data.index'
+import { Route as DataIndicatorIdRouteImport } from './routes/data.$indicatorId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyzeRoute = AnalyzeRouteImport.update({
+  id: '/analyze',
+  path: '/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PredictionsRoute = PredictionsRouteImport.update({
+  id: '/predictions',
+  path: '/predictions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -22,31 +42,83 @@ const ProfileRoute = ProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DataIndexRoute = DataIndexRouteImport.update({
+  id: '/data/',
+  path: '/data/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DataIndicatorIdRoute = DataIndicatorIdRouteImport.update({
+  id: '/data/$indicatorId',
+  path: '/data/$indicatorId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/insights': typeof InsightsRoute
+  '/predictions': typeof PredictionsRoute
   '/profile': typeof ProfileRoute
+  '/data/$indicatorId': typeof DataIndicatorIdRoute
+  '/data/': typeof DataIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/insights': typeof InsightsRoute
+  '/predictions': typeof PredictionsRoute
   '/profile': typeof ProfileRoute
+  '/data/$indicatorId': typeof DataIndicatorIdRoute
+  '/data': typeof DataIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analyze': typeof AnalyzeRoute
+  '/insights': typeof InsightsRoute
+  '/predictions': typeof PredictionsRoute
   '/profile': typeof ProfileRoute
+  '/data/$indicatorId': typeof DataIndicatorIdRoute
+  '/data/': typeof DataIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/profile'
+  fullPaths:
+    | '/'
+    | '/analyze'
+    | '/insights'
+    | '/predictions'
+    | '/profile'
+    | '/data/$indicatorId'
+    | '/data/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/profile'
-  id: '__root__' | '/' | '/profile'
+  to:
+    | '/'
+    | '/analyze'
+    | '/insights'
+    | '/predictions'
+    | '/profile'
+    | '/data/$indicatorId'
+    | '/data'
+  id:
+    | '__root__'
+    | '/'
+    | '/analyze'
+    | '/insights'
+    | '/predictions'
+    | '/profile'
+    | '/data/$indicatorId'
+    | '/data/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyzeRoute: typeof AnalyzeRoute
+  InsightsRoute: typeof InsightsRoute
+  PredictionsRoute: typeof PredictionsRoute
   ProfileRoute: typeof ProfileRoute
+  DataIndicatorIdRoute: typeof DataIndicatorIdRoute
+  DataIndexRoute: typeof DataIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +130,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/analyze': {
+      id: '/analyze'
+      path: '/analyze'
+      fullPath: '/analyze'
+      preLoaderRoute: typeof AnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/predictions': {
+      id: '/predictions'
+      path: '/predictions'
+      fullPath: '/predictions'
+      preLoaderRoute: typeof PredictionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
@@ -65,12 +158,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/data/': {
+      id: '/data/'
+      path: '/data'
+      fullPath: '/data/'
+      preLoaderRoute: typeof DataIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/data/$indicatorId': {
+      id: '/data/$indicatorId'
+      path: '/data/$indicatorId'
+      fullPath: '/data/$indicatorId'
+      preLoaderRoute: typeof DataIndicatorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyzeRoute: AnalyzeRoute,
+  InsightsRoute: InsightsRoute,
+  PredictionsRoute: PredictionsRoute,
   ProfileRoute: ProfileRoute,
+  DataIndicatorIdRoute: DataIndicatorIdRoute,
+  DataIndexRoute: DataIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
