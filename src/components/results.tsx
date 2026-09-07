@@ -109,7 +109,7 @@ export function ResultsView({ result, actions }: { result: AnalysisResult; actio
                 </tr>
               </thead>
               <tbody className="tabular">
-                {[result.intercept ?? r.intercept, ...r.coefficients].map((c) => (
+                {[r.intercept, ...r.coefficients].map((c) => (
                   <tr key={c.variable} className="border-b border-border/70">
                     <td className="py-2 pr-3 font-semibold">{c.label}</td>
                     <td className="py-2 pr-3">{c.coefficient.toFixed(3)}</td>
