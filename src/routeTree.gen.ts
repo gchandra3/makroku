@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AnalyzeRouteImport } from './routes/analyze'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as DataIndexRouteImport } from './routes/data.index'
+import { Route as DataIndicatorIdRouteImport } from './routes/data.$indicatorId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,17 +35,24 @@ const DataIndexRoute = DataIndexRouteImport.update({
   path: '/data/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DataIndicatorIdRoute = DataIndicatorIdRouteImport.update({
+  id: '/data/$indicatorId',
+  path: '/data/$indicatorId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analyze': typeof AnalyzeRoute
   '/profile': typeof ProfileRoute
+  '/data/$indicatorId': typeof DataIndicatorIdRoute
   '/data/': typeof DataIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analyze': typeof AnalyzeRoute
   '/profile': typeof ProfileRoute
+  '/data/$indicatorId': typeof DataIndicatorIdRoute
   '/data': typeof DataIndexRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,23 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analyze': typeof AnalyzeRoute
   '/profile': typeof ProfileRoute
+  '/data/$indicatorId': typeof DataIndicatorIdRoute
   '/data/': typeof DataIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analyze' | '/profile' | '/data/'
+  fullPaths: '/' | '/analyze' | '/profile' | '/data/$indicatorId' | '/data/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analyze' | '/profile' | '/data'
-  id: '__root__' | '/' | '/analyze' | '/profile' | '/data/'
+  to: '/' | '/analyze' | '/profile' | '/data/$indicatorId' | '/data'
+  id:
+    '__root__' | '/' | '/analyze' | '/profile' | '/data/$indicatorId' | '/data/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyzeRoute: typeof AnalyzeRoute
   ProfileRoute: typeof ProfileRoute
+  DataIndicatorIdRoute: typeof DataIndicatorIdRoute
   DataIndexRoute: typeof DataIndexRoute
 }
 
@@ -99,6 +110,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DataIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/data/$indicatorId': {
+      id: '/data/$indicatorId'
+      path: '/data/$indicatorId'
+      fullPath: '/data/$indicatorId'
+      preLoaderRoute: typeof DataIndicatorIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -106,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyzeRoute: AnalyzeRoute,
   ProfileRoute: ProfileRoute,
+  DataIndicatorIdRoute: DataIndicatorIdRoute,
   DataIndexRoute: DataIndexRoute,
 }
 export const routeTree = rootRouteImport
