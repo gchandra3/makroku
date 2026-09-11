@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getIndicator, sliceByYears, type Indicator } from "@/lib/econ-data";
 import { predict, runRegression, type RegressionResult } from "@/lib/stats";
+import { fetchIndicator } from "@/api/client";
 
 export type VariableMeta = {
   id: string;
@@ -57,9 +58,13 @@ function meta(ind: Indicator): VariableMeta {
 export const runAnalysis = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => inputSchema.parse(d))
   .handler(async ({ data }): Promise<AnalysisResponse> => {
-    const target = getIndicator(data.targetId);
+    // Try API first, fall back to mock data
+    const resolve = async (id: string) => (await fetchIndicator(id)) ?? getIndicator(id);
+
+    const target = await resolve(data.targetId);
     if (!target) return { ok: false, error: "Target indicator not found." };
-    const vars = data.variableIds.map(getIndicator).filter(Boolean) as Indicator[];
+    const resolved = await Promise.all(data.variableIds.map(resolve));
+    const vars = resolved.filter(Boolean) as Indicator[];
     if (vars.length === 0) return { ok: false, error: "Select at least one explanatory variable." };
 
     const from = Math.min(data.from, data.to);

@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # Redis cache
+  redis:
+    image: redis:7-alpine
+    container_name: makroku-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # SQLite is file-based, no separate container needed
+
+  # API Gateway / Backend
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+      target: development
+    container_name: makroku-api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=file:./data/makroku.db
+      - REDIS_URL=redis://redis:6379
+      - REGRESSION_SERVICE_URL=http://regression:8000
+      - PORT=3000
+    volumes:
+      - ./apps/api:/app
+      - /app/node_modules
+      - ./data:/app/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: npm run dev
+
+  # Python Regression Microservice
+  regression:
+    build:
+      context: ./apps/regression
+      dockerfile: Dockerfile
+      target: development
+    container_name: makroku-regression
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - ./apps/regression:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Frontend (placeholder for when ready)
+  # web:
+  #   build:
+  #     context: ./apps/web
+  #     dockerfile: Dockerfile
+  #     target: development
+  #   container_name: makroku-web
+  #   ports:
+  #     - "5173:5173"
+  #   environment:
+  #     - VITE_API_URL=http://localhost:3000
+  #   volumes:
+  #     - ./apps/web:/app
+  #     - /app/node_modules
+  #   depends_on:
+  #     - api
+
+volumes:
+  redis-data:

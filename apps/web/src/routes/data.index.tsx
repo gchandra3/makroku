@@ -4,9 +4,15 @@ import { Search } from "lucide-react";
 import { AppShell, Page, PageHeader } from "@/components/app-shell";
 import { IndicatorCard } from "@/components/indicator-card";
 import { Chip, EmptyState } from "@/components/ui-kit";
-import { categories, countries, indicators } from "@/lib/econ-data";
+import { categories, countries, indicators as mockIndicators } from "@/lib/econ-data";
+import type { Indicator } from "@/lib/econ-data";
+import { fetchIndicators } from "@/api/client";
 
 export const Route = createFileRoute("/data/")({
+  loader: async () => {
+    const list = (await fetchIndicators()) ?? mockIndicators;
+    return list;
+  },
   head: () => ({
     meta: [
       { title: "Economic Indicators Explorer | MacroCast" },
@@ -28,19 +34,20 @@ export const Route = createFileRoute("/data/")({
 });
 
 function DataPage() {
+  const loaderData = Route.useLoaderData();
   const [query, setQuery] = useState("");
   const [country, setCountry] = useState<string>("Indonesia");
   const [category, setCategory] = useState<string | null>(null);
 
   const list = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return indicators.filter(
+    return loaderData.filter(
       (i) =>
         i.country === country &&
         (!category || i.category === category) &&
         (q === "" || i.name.toLowerCase().includes(q) || i.category.toLowerCase().includes(q)),
     );
-  }, [query, country, category]);
+  }, [query, country, category, loaderData]);
 
   return (
     <AppShell>

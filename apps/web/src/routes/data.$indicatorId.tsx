@@ -4,13 +4,15 @@ import { ArrowLeft } from "lucide-react";
 import { AppShell, Page } from "@/components/app-shell";
 import { SeriesChart } from "@/components/charts";
 import { Button, Card, Chip, Delta, EmptyState, SectionTitle } from "@/components/ui-kit";
+import { fetchIndicator } from "@/api/client";
 import { formatValue, getIndicator, latest } from "@/lib/econ-data";
 
 export const Route = createFileRoute("/data/$indicatorId")({
-  loader: ({ params }) => {
-    const ind = getIndicator(params.indicatorId);
+  loader: async ({ params }) => {
+    // Try API first, fall back to mock
+    const ind = (await fetchIndicator(params.indicatorId)) ?? getIndicator(params.indicatorId);
     if (!ind) throw notFound();
-    return { name: ind.name, country: ind.country, description: ind.description };
+    return ind;
   },
   head: ({ loaderData }) => {
     if (!loaderData)
@@ -39,7 +41,7 @@ const RANGES = [
 
 function IndicatorDetail() {
   const { indicatorId } = Route.useParams();
-  const ind = getIndicator(indicatorId)!;
+  const ind = Route.useLoaderData()!;
   const l = latest(ind);
   const [range, setRange] = useState(2);
 
